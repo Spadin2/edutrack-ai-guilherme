@@ -1,0 +1,10 @@
+Projeto da disciplina Innovation Lab – Faculdade Impacta
+Aluno: Guilherme Spadin Domingues
+Ano: 2026
+
+Utilizamos:
+Git & GitHub
+VSCode
+Node.js
+OpenSpec
+Xano
