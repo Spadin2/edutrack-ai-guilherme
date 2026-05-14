@@ -1,0 +1,41 @@
+// Delete a subject owned by the authenticated user
+query "subjects/{subject_id}" verb=DELETE {
+  api_group = "Subjects"
+  auth = ""
+
+  input {
+    int subject_id {
+      description = "Subject ID"
+    }
+  }
+
+  stack {
+    db.get "subjects" {
+      field_name  = "id"
+      field_value = $input.subject_id
+    } as $subject
+
+    conditional {
+      if ($subject == null) {
+        throw {
+          name  = "notfound"
+          value = "Subject not found."
+        }
+      }
+
+      if ($subject.user_id != $auth.id) {
+        throw {
+          name  = "accessdenied"
+          value = "You are not authorized to delete this subject."
+        }
+      }
+    }
+
+    db.del "subjects" {
+      field_name  = "id"
+      field_value = $input.subject_id
+    }
+  }
+
+  response = {deleted: true}
+}
