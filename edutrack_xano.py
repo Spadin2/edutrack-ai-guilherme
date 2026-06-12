@@ -61,10 +61,12 @@ def tela_acesso():
     tab_login, tab_cadastro = st.tabs(['Entrar', 'Criar Minha Conta'])
 
     with tab_login:
-        with st.form('login_form'):
-            email = st.text_input('E-mail')
-            senha = st.text_input('Senha', type='password')
-            if st.form_submit_button('Acessar Meu Painel'):
+        # Adicionamos uma key única para o formulário
+        with st.form(key='login_form_unique'):
+            email = st.text_input('E-mail', key='login_email')
+            senha = st.text_input('Senha', type='password', key='login_password')
+            submit_l = st.form_submit_button('Acessar Meu Painel')
+            if submit_l:
                 res = requests.post(f'{BASE_URL}/auth/login', json={'email': email, 'password': senha})
                 if res.status_code == 200:
                     st.session_state.auth_token = res.json().get('authToken')
@@ -74,11 +76,13 @@ def tela_acesso():
                     st.error('Credenciais inválidas.')
 
     with tab_cadastro:
-        with st.form('cadastro_form'):
-            nome = st.text_input('Nome')
-            email_c = st.text_input('E-mail')
-            pass_c = st.text_input('Senha', type='password')
-            if st.form_submit_button('Cadastrar'):
+        # Adicionamos uma key única para o formulário
+        with st.form(key='cadastro_form_unique'):
+            nome = st.text_input('Nome', key='cad_nome')
+            email_c = st.text_input('E-mail', key='cad_email')
+            pass_c = st.text_input('Senha', type='password', key='cad_senha')
+            submit_c = st.form_submit_button('Cadastrar')
+            if submit_c:
                 res = requests.post(f'{BASE_URL}/auth/signup', json={'name': nome, 'email': email_c, 'password': pass_c})
                 if res.status_code == 200:
                     st.success('Conta criada! Agora faça o login.')
